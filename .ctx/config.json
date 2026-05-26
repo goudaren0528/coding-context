@@ -1,0 +1,9 @@
+{
+  "projectId": "sY89yBxAXWShFimzCQLCl",
+  "projectName": "context-runtime",
+  "gitRemote": null,
+  "llm": {
+    "enabled": true,
+    "model": "claude-sonnet-4-20250514"
+  }
+}
