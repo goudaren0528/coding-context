@@ -24,7 +24,7 @@ export async function exportCommand(outputPath?: string): Promise<void> {
   const projects = getProjects(userDb);
 
   const exportData: ExportData = {
-    version: "0.1.0",
+    version: "0.3.0",
     exportedAt: new Date().toISOString(),
     preferences: preferences.map(p => ({
       category: p.category,

@@ -1,11 +1,29 @@
 {
   "name": "ctx",
-  "version": "0.1.0",
-  "description": "AI Workspace Runtime — persistent project memory for Claude Code and OpenCode",
+  "version": "0.3.0",
+  "description": "Local-first CLI runtime that adds persistent project memory to Claude Code and OpenCode.",
   "type": "module",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "ctx": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "npm@10",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goudaren0528/coding-context.git"
+  },
+  "homepage": "https://github.com/goudaren0528/coding-context#readme",
+  "bugs": {
+    "url": "https://github.com/goudaren0528/coding-context/issues"
   },
   "scripts": {
     "build": "tsc",
@@ -16,12 +34,14 @@
     "test:watch": "vitest"
   },
   "keywords": [
-    "claude",
+    "anthropic",
+    "claude-code",
     "opencode",
-    "ai",
-    "context",
-    "memory",
-    "cli"
+    "cli",
+    "developer-tools",
+    "local-first",
+    "project-memory",
+    "typescript"
   ],
   "license": "MIT",
   "dependencies": {

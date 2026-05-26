@@ -31,6 +31,7 @@ export interface SessionRunOptions {
   injectL2: string | null;
   injectL3: string | null;
   injectL4: string | null;
+  env?: Record<string, string>;
 }
 
 export async function runSession(
@@ -53,7 +54,8 @@ export async function runSession(
   const pty = spawnPty(
     opts.tool === "claude" ? "claude" : "opencode",
     [],
-    opts.projectRoot
+    opts.projectRoot,
+    opts.env
   );
 
   const stdin = process.stdin;

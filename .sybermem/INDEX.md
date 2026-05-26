@@ -19,6 +19,8 @@
 - **Phase 4 (complete)**: `ctx export` / `ctx import` for sanitized developer memory portability, `ctx restore` for environment recovery (branch checkout, file listing), `ctx ask` for natural language semantic retrieval over project memory using Claude API.
 - Design doc at `docs/design.md` (v0.3.0, locked).
 
+- Public release preparation made `ctx` trial-ready on GitHub by fixing context env handoff, tightening test scope, and adding open-source packaging/docs scaffolding.
+- GitHub repository metadata now points to the real public repo so clone instructions, package discovery, and issue links all resolve correctly.
 <!-- add new conclusions here -->
 
 ---
@@ -33,6 +35,8 @@
 | 002 | 2026-05-26 | Phase 1 — project continuity, workspace state, MVP | implemented | [link](changes/2026-05-26-002-phase1-project-continuity-workspace-state-mvp.md) |
 | 003 | 2026-05-26 | Phase 3 — privacy, reliability, correction | implemented | [link](changes/2026-05-26-003-phase3-privacy-reliability-correction.md) |
 | 004 | 2026-05-26 | Phase 4 — export, import, restore, cross-device sync | implemented | [link](changes/2026-05-26-004-phase4-export-import-restore-cross-device-sync.md) |
+| 008 | 2026-05-26 | Public release preparation | implemented | [link](changes/2026-05-26-008-public-release-preparation.md) |
+| 010 | 2026-05-26 | Public repository metadata links | implemented | [link](changes/2026-05-26-010-public-repository-metadata-links.md) |
 <!-- add new records here -->
 
 ### Decisions

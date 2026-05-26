@@ -18,7 +18,7 @@ const program = new Command();
 program
   .name("ctx")
   .description("AI Workspace Runtime \u2014 persistent project memory for Claude Code and OpenCode")
-  .version("0.1.0");
+  .version("0.3.0");
 
 program
   .command("claude")

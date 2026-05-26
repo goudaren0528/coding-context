@@ -71,10 +71,9 @@ export async function startTool(tool: "claude" | "opencode"): Promise<void> {
     .filter(Boolean)
     .join("\n\n");
 
-  const env: Record<string, string> = {};
-  if (injectionBlock) {
-    env.CTX_CONTEXT = injectionBlock;
-  }
+  const env = injectionBlock
+    ? { CTX_CONTEXT: injectionBlock }
+    : undefined;
 
   await runSession(projectDb, userDb, {
     projectId: config.projectId,
@@ -87,5 +86,6 @@ export async function startTool(tool: "claude" | "opencode"): Promise<void> {
     injectL2: injections.l2,
     injectL3: injections.l3,
     injectL4: injections.l4,
+    env,
   }, saveDbs);
 }
