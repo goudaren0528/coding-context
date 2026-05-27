@@ -154,6 +154,7 @@ ctx doctor llm
 - This is still an early release and should be treated as evolving tooling
 - Claude Code / OpenCode integration depends on those CLIs being installed correctly on your machine
 - The runtime uses `child_process.spawn`, so terminal behavior should not be described as full PTY emulation
+- `ctx opencode` now uses direct terminal passthrough so OpenCode can start reliably, but that mode does not capture full session I/O for post-session compression
 - Some advanced release packaging metadata is prepared, but npm publication has not happened yet
 
 ## Development

@@ -2,6 +2,7 @@ import { spawn, ChildProcess } from "child_process";
 
 export interface PtyProcess {
   process: ChildProcess;
+  mode: "piped" | "inherit";
   onData: (handler: (data: string) => void) => void;
   onExit: (handler: (code: number | null) => void) => void;
   write: (data: string) => void;
@@ -16,10 +17,11 @@ export function spawnPty(
   env?: Record<string, string>
 ): PtyProcess {
   const childEnv = { ...process.env, ...env };
+  const mode = command === "opencode" ? "inherit" : "piped";
   const child = spawn(command, args, {
     cwd,
     env: childEnv,
-    stdio: ["pipe", "pipe", "pipe"],
+    stdio: mode === "inherit" ? "inherit" : ["pipe", "pipe", "pipe"],
     shell: process.platform === "win32",
     windowsHide: true,
   });
@@ -27,14 +29,14 @@ export function spawnPty(
   const dataHandlers: Array<(data: string) => void> = [];
   const exitHandlers: Array<(code: number | null) => void> = [];
 
-  if (child.stdout) {
+  if (mode === "piped" && child.stdout) {
     child.stdout.setEncoding("utf-8");
     child.stdout.on("data", (data: string) => {
       for (const h of dataHandlers) h(data);
     });
   }
 
-  if (child.stderr) {
+  if (mode === "piped" && child.stderr) {
     child.stderr.setEncoding("utf-8");
     child.stderr.on("data", (data: string) => {
       for (const h of dataHandlers) h(data);
@@ -52,6 +54,7 @@ export function spawnPty(
 
   return {
     process: child,
+    mode,
     onData(handler) {
       dataHandlers.push(handler);
     },

@@ -62,37 +62,46 @@ export async function runSession(
   const stdin = process.stdin;
   const stdout = process.stdout;
 
-  if (stdin.isTTY && typeof stdin.setRawMode === "function") {
-    stdin.setRawMode(true);
+  if (pty.mode === "piped") {
+    if (stdin.isTTY && typeof stdin.setRawMode === "function") {
+      stdin.setRawMode(true);
+    }
+    stdin.resume();
+    stdin.setEncoding("utf-8");
+
+    pty.onData((data: string) => {
+      stdout.write(data);
+      const sanitized = redactSecrets(data);
+      events.push({ source: "stdout", content: sanitized });
+      insertEvent(projectDb, session.id, "stdout", sanitized);
+    });
+
+    stdin.on("data", (data: string) => {
+      pty.write(data);
+      const sanitized = redactSecrets(data);
+      events.push({ source: "stdin", content: sanitized });
+      insertEvent(projectDb, session.id, "stdin", sanitized);
+    });
+  } else {
+    console.log("[ctx] opencode is running in direct terminal mode. Session capture is disabled for this session.");
   }
-  stdin.resume();
-  stdin.setEncoding("utf-8");
-
-  pty.onData((data: string) => {
-    stdout.write(data);
-    const sanitized = redactSecrets(data);
-    events.push({ source: "stdout", content: sanitized });
-    insertEvent(projectDb, session.id, "stdout", sanitized);
-  });
-
-  stdin.on("data", (data: string) => {
-    pty.write(data);
-    const sanitized = redactSecrets(data);
-    events.push({ source: "stdin", content: sanitized });
-    insertEvent(projectDb, session.id, "stdin", sanitized);
-  });
 
   return new Promise<void>((resolve) => {
     pty.onExit(async (code) => {
-      if (stdin.isTTY && typeof stdin.setRawMode === "function") {
-        stdin.setRawMode(false);
+      if (pty.mode === "piped") {
+        if (stdin.isTTY && typeof stdin.setRawMode === "function") {
+          stdin.setRawMode(false);
+        }
+        stdin.pause();
       }
-      stdin.pause();
       saveDbs();
 
-      console.log(`\n[ctx] session ended. compressing...`);
-
-      await finalizeSession(session, events, opts, projectDb, userDb);
+      if (pty.mode === "piped") {
+        console.log(`\n[ctx] session ended. compressing...`);
+        await finalizeSession(session, events, opts, projectDb, userDb);
+      } else {
+        completeSession(projectDb, session.id, null);
+      }
       saveDbs();
 
       process.exit(code ?? 0);

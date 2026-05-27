@@ -23,6 +23,7 @@
 - GitHub repository metadata now points to the real public repo so clone instructions, package discovery, and issue links all resolve correctly.
 - `ctx` now uses an OpenAI-compatible LLM client configured by `CTX_MODEL`, `CTX_BASE_URL`, and `CTX_API_KEY` so self-hosted and third-party endpoints work without Anthropic-specific code.
 - `ctx doctor llm` now verifies active LLM setup so a new machine can quickly confirm model, base URL, and API key wiring before starting a session.
+- `ctx opencode` now uses direct terminal passthrough because piped stdio prevented OpenCode's TUI from starting reliably under the wrapper.
 <!-- add new conclusions here -->
 
 ---
@@ -61,6 +62,7 @@
 
 | # | Date | Title | Status | Severity | Link |
 |---|------|-------|--------|----------|------|
+| 001 | 2026-05-28 | ctx opencode hangs without real terminal | fixed | high | [link](bugs/2026-05-28-001-ctx-opencode-hangs-without-real-terminal.md) |
 <!-- add new records here -->
 
 ---
