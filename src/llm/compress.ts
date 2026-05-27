@@ -1,5 +1,5 @@
 import { callLlm } from "./client.js";
-import type { WorkspaceState, GitContext, CompressionOutput } from "../types.js";
+import type { WorkspaceState, GitContext, CompressionOutput, ProjectConfig } from "../types.js";
 
 const COMPRESSOR_SYSTEM = `You are the ctx workspace state compressor.
 
@@ -31,7 +31,8 @@ Output ONLY the JSON object.`;
 export async function compressSession(
   previousState: WorkspaceState | null,
   eventsText: string,
-  gitContext: GitContext
+  gitContext: GitContext,
+  projectConfig: ProjectConfig | null = null
 ): Promise<CompressionOutput | null> {
   const eventsTruncated = eventsText.slice(0, 12000);
 
@@ -53,7 +54,7 @@ export async function compressSession(
 
   const message = `Previous state:\n${prevStateJson}\n\nGit context:\n${gitJson}\n\nSession transcript:\n${eventsTruncated}`;
 
-  const result = await callLlm(COMPRESSOR_SYSTEM, message, { maxTokens: 2048 });
+  const result = await callLlm(COMPRESSOR_SYSTEM, message, { maxTokens: 2048, projectConfig });
   if (!result) return null;
 
   try {

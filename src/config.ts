@@ -1,16 +1,35 @@
 import * as dotenv from "dotenv";
 import * as fs from "fs";
 import { getProjectConfigPath } from "./paths.js";
-import type { ProjectConfig } from "./types.js";
+import type { ProjectConfig, ResolvedLlmConfig } from "./types.js";
 
 dotenv.config();
 
-export function getAnthropicApiKey(): string | undefined {
-  return process.env.ANTHROPIC_API_KEY;
+function normalizeEnvValue(value: string | undefined): string | null {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : null;
 }
 
-export function getCtxModel(): string {
-  return process.env.CTX_MODEL ?? "claude-sonnet-4-20250514";
+export function getCtxApiKey(): string | null {
+  return normalizeEnvValue(process.env.CTX_API_KEY);
+}
+
+export function getCtxBaseUrl(): string | null {
+  return normalizeEnvValue(process.env.CTX_BASE_URL);
+}
+
+export function getCtxModel(): string | null {
+  return normalizeEnvValue(process.env.CTX_MODEL);
+}
+
+export function resolveLlmConfig(projectConfig: ProjectConfig | null): ResolvedLlmConfig {
+  const llm = projectConfig?.llm;
+  return {
+    enabled: llm?.enabled ?? true,
+    model: llm?.model ?? getCtxModel(),
+    baseUrl: llm?.baseUrl ?? getCtxBaseUrl(),
+    apiKey: getCtxApiKey(),
+  };
 }
 
 export function getEventTtlDays(): number {

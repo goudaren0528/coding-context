@@ -68,11 +68,11 @@ export async function askCommand(question: string): Promise<void> {
   console.log(`Searching project memory for: "${question}"...`);
   console.log("");
 
-  const answer = await askQuestion(question, workspaceStateSummary, sessionContext, decisionContext);
+  const answer = await askQuestion(question, workspaceStateSummary, sessionContext, decisionContext, config);
 
   if (answer) {
     console.log(answer);
   } else {
-    console.log("Could not retrieve an answer. Make sure ANTHROPIC_API_KEY is set.");
+    console.log("Could not retrieve an answer. Make sure CTX_MODEL, CTX_BASE_URL, and CTX_API_KEY are configured.");
   }
 }

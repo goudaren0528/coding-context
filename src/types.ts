@@ -133,8 +133,16 @@ export interface ProjectConfig {
   gitRemote: string | null;
   llm: {
     enabled: boolean;
-    model: string;
+    model: string | null;
+    baseUrl: string | null;
   };
+}
+
+export interface ResolvedLlmConfig {
+  enabled: boolean;
+  model: string | null;
+  baseUrl: string | null;
+  apiKey: string | null;
 }
 
 export interface CompressionInput {

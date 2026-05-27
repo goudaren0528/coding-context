@@ -77,6 +77,7 @@ export async function startTool(tool: "claude" | "opencode"): Promise<void> {
 
   await runSession(projectDb, userDb, {
     projectId: config.projectId,
+    projectConfig: config,
     projectRoot,
     tool,
     gitContext,

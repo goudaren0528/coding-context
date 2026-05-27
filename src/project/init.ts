@@ -51,7 +51,8 @@ export async function ensureProjectInit(
       gitRemote,
       llm: {
         enabled: true,
-        model: "claude-sonnet-4-20250514",
+        model: null,
+        baseUrl: null,
       },
     };
     saveProjectConfig(projectRoot, config);

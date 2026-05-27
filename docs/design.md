@@ -275,7 +275,8 @@ CREATE INDEX idx_decisions_project ON decisions(project_id);
   "gitRemote": "git@github.com:company/payment-service.git",
   "llm": {
     "enabled": true,
-    "model": "claude-sonnet-4-20250514"
+    "model": null,
+    "baseUrl": null
   }
 }
 ```
@@ -711,7 +712,7 @@ src/
 │   ├── filter.ts                # Filter preferences by project context
 │   └── compressor.ts            # Session → workspace state compression
 ├── llm/
-│   ├── client.ts                # Anthropic SDK wrapper + retry
+│   ├── client.ts                # OpenAI-compatible client wrapper
 │   ├── prompts.ts               # Compressor/titler prompt templates
 │   ├── titler.ts                # Session title generation
 │   ├── compress.ts              # LLM compressor call
@@ -732,7 +733,7 @@ src/
 | PTY | [node-pty](https://github.com/microsoft/node-pty) | Cross-platform pseudo-terminal |
 | Database | [better-sqlite3](https://github.com/WiseLibs/better-sqlite3) | Synchronous, zero config, WAL mode |
 | CLI | [commander](https://github.com/tj/commander.js) | Lightweight, mature |
-| LLM | [@anthropic-ai/sdk](https://www.npmjs.com/package/@anthropic-ai/sdk) | Claude API |
+| LLM | OpenAI-compatible HTTP API | Supports self-hosted or third-party endpoints via base URL |
 | ID | [nanoid](https://github.com/ai/nanoid) | URL-safe IDs |
 | Config | [dotenv](https://github.com/motdotla/dotenv) | API key management |
 
@@ -745,8 +746,9 @@ MVP 不依赖 ink、chokidar 等——优先保持依赖最小化。
 ### 环境变量
 
 ```bash
-ANTHROPIC_API_KEY=sk-ant-...          # Required
-CTX_MODEL=claude-sonnet-4-20250514    # Model for extraction/compression
+CTX_API_KEY=...                       # Required for LLM-backed features
+CTX_BASE_URL=https://endpoint/v1      # Required OpenAI-compatible base URL
+CTX_MODEL=gpt-4.1-mini                # Required model name
 CTX_EVENT_TTL_DAYS=14                 # Raw events retention
 CTX_L2_SESSION_THRESHOLD=10           # Sessions before ctx update hint
 CTX_L2_DAY_THRESHOLD=7                # Days before ctx update hint
@@ -761,7 +763,8 @@ CTX_L2_DAY_THRESHOLD=7                # Days before ctx update hint
   "gitRemote": "git@github.com:company/payment-service.git",
   "llm": {
     "enabled": true,
-    "model": "claude-sonnet-4-20250514"
+    "model": null,
+    "baseUrl": null
   }
 }
 ```
@@ -816,7 +819,7 @@ CTX_L2_DAY_THRESHOLD=7                # Days before ctx update hint
 | 1.7 | PTY runtime：spawn Claude/OpenCode，透明 stdio 透传 |
 | 1.8 | Session 生命周期：start → events capture → complete on exit |
 | 1.9 | Session store：session + events CRUD |
-| 1.10 | LLM client：Anthropic SDK 封装 + 重试 |
+| 1.10 | LLM client：OpenAI-compatible HTTP client 封装 |
 | 1.11 | LLM titler：session 结束时生成标题 |
 | 1.12 | LLM compressor：session → workspace_state 压缩更新 |
 | 1.13 | State store：workspace_state 读写 |

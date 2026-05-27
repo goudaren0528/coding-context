@@ -1,4 +1,5 @@
 import { callLlm, isAvailable } from "../llm/client.js";
+import type { ProjectConfig } from "../types.js";
 
 const RETRIEVER_SYSTEM = `You are the ctx memory retriever. Answer the user's question by searching through their project memory.
 
@@ -13,9 +14,10 @@ export async function askQuestion(
   question: string,
   workspaceStateSummary: string,
   sessionContext: string,
-  decisionContext: string
+  decisionContext: string,
+  projectConfig: ProjectConfig | null = null
 ): Promise<string | null> {
-  if (!isAvailable()) {
+  if (!isAvailable(projectConfig)) {
     return null;
   }
 
@@ -40,7 +42,7 @@ export async function askQuestion(
   const result = await callLlm(
     RETRIEVER_SYSTEM,
     `${context}\n\n---\n\nQuestion: ${question}`,
-    { maxTokens: 1024 }
+    { maxTokens: 1024, projectConfig }
   );
 
   return result || null;

@@ -24,7 +24,8 @@ const baseConfig: ProjectConfig = {
   gitRemote: null,
   llm: {
     enabled: true,
-    model: "claude-sonnet-4-20250514",
+    model: null,
+    baseUrl: null,
   },
 };
 

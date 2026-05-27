@@ -26,12 +26,15 @@ Without a runtime layer, each new AI coding session has to reconstruct project c
 
 - Node.js 22+
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or [OpenCode](https://github.com/sst/opencode) installed and available on your `PATH`
-- `ANTHROPIC_API_KEY` if you want LLM-backed features such as title generation, compression, and `ctx ask`
+- An OpenAI-compatible LLM endpoint if you want LLM-backed features such as title generation, compression, and `ctx ask`
+- `CTX_MODEL`, `CTX_BASE_URL`, and `CTX_API_KEY` for those LLM-backed features
 
 Example:
 
 ```bash
-export ANTHROPIC_API_KEY=sk-ant-...
+export CTX_MODEL=gpt-4.1-mini
+export CTX_BASE_URL=https://your-endpoint.example.com/v1
+export CTX_API_KEY=...
 ```
 
 ## Install locally
@@ -79,6 +82,7 @@ On first run, `ctx` will initialize repo-local state under `<repo>/.ctx/` and re
 | `ctx memory forget <id>` | Archive a candidate |
 | `ctx update` | Sync cross-project memory |
 | `ctx doctor privacy` | Run privacy diagnostics |
+| `ctx doctor llm` | Check active LLM configuration |
 | `ctx state edit <field> <value>` | Correct workspace state manually |
 | `ctx export [file]` | Export sanitized developer memory |
 | `ctx import <file>` | Import developer memory |
@@ -123,19 +127,27 @@ Privacy notes:
 - `<repo>/.ctx/` is meant to stay local and is ignored by this repo
 - session data is redacted before storage for common secrets such as tokens and keys
 - `ctx doctor privacy` helps audit privacy-related behavior
+- `ctx doctor llm` checks whether model, base URL, and API key are configured
 - `ctx export` produces a sanitized export for sharing or migration
 
 ## Configuration
 
 | Environment variable | Default | Description |
 | --- | --- | --- |
-| `ANTHROPIC_API_KEY` | — | Enables LLM-backed features |
-| `CTX_MODEL` | `claude-sonnet-4-20250514` | Model used for extraction/compression |
+| `CTX_API_KEY` | — | API key for the configured OpenAI-compatible endpoint |
+| `CTX_BASE_URL` | — | Base URL for the OpenAI-compatible endpoint |
+| `CTX_MODEL` | — | Model used for extraction/compression |
 | `CTX_EVENT_TTL_DAYS` | `14` | Retention for raw session events |
 | `CTX_L2_SESSION_THRESHOLD` | `10` | Threshold for L2 state detail |
 | `CTX_L2_DAY_THRESHOLD` | `7` | Threshold for L2 recency detail |
 
 Per-project config lives at `<repo>/.ctx/config.json`.
+
+You can verify LLM setup at any time with:
+
+```bash
+ctx doctor llm
+```
 
 ## Current limitations
 

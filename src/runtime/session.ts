@@ -1,5 +1,5 @@
 import type { Database as SqlJsDatabase } from "sql.js";
-import type { Session, GitContext, WorkspaceState, ProjectBrain, DeveloperPreference } from "../types.js";
+import type { Session, GitContext, WorkspaceState, ProjectBrain, DeveloperPreference, ProjectConfig } from "../types.js";
 import { spawnPty } from "./pty.js";
 import {
   createSession,
@@ -22,6 +22,7 @@ import { redactForLlm, redactSecrets } from "../privacy/redactor.js";
 
 export interface SessionRunOptions {
   projectId: string;
+  projectConfig: ProjectConfig;
   projectRoot: string;
   tool: "claude" | "opencode";
   gitContext: GitContext;
@@ -113,8 +114,8 @@ async function finalizeSession(
 
   let title: string | null = null;
 
-  if (isAvailable()) {
-    const titleResult = await generateTitle(eventsText);
+  if (isAvailable(opts.projectConfig)) {
+    const titleResult = await generateTitle(eventsText, opts.projectConfig);
     if (titleResult) {
       title = titleResult.title;
     }
@@ -122,7 +123,8 @@ async function finalizeSession(
     const compressionResult = await compressSession(
       opts.workspaceState,
       eventsText,
-      opts.gitContext
+      opts.gitContext,
+      opts.projectConfig
     );
 
     if (compressionResult) {

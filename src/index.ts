@@ -84,8 +84,8 @@ program
 
 program
   .command("doctor")
-  .description("Run diagnostics (privacy, state)")
-  .argument("[subject]", "Check subject: privacy, state, all", "all")
+  .description("Run diagnostics (privacy, llm, state)")
+  .argument("[subject]", "Check subject: privacy, llm, state, all", "all")
   .action(async (subject: string) => {
     try {
       await doctorCommand(subject);

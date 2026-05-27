@@ -21,6 +21,8 @@
 
 - Public release preparation made `ctx` trial-ready on GitHub by fixing context env handoff, tightening test scope, and adding open-source packaging/docs scaffolding.
 - GitHub repository metadata now points to the real public repo so clone instructions, package discovery, and issue links all resolve correctly.
+- `ctx` now uses an OpenAI-compatible LLM client configured by `CTX_MODEL`, `CTX_BASE_URL`, and `CTX_API_KEY` so self-hosted and third-party endpoints work without Anthropic-specific code.
+- `ctx doctor llm` now verifies active LLM setup so a new machine can quickly confirm model, base URL, and API key wiring before starting a session.
 <!-- add new conclusions here -->
 
 ---
@@ -37,6 +39,8 @@
 | 004 | 2026-05-26 | Phase 4 — export, import, restore, cross-device sync | implemented | [link](changes/2026-05-26-004-phase4-export-import-restore-cross-device-sync.md) |
 | 008 | 2026-05-26 | Public release preparation | implemented | [link](changes/2026-05-26-008-public-release-preparation.md) |
 | 010 | 2026-05-26 | Public repository metadata links | implemented | [link](changes/2026-05-26-010-public-repository-metadata-links.md) |
+| 011 | 2026-05-27 | OpenAI-compatible LLM support | implemented | [link](changes/2026-05-27-011-openai-compatible-llm-support.md) |
+| 012 | 2026-05-27 | LLM doctor diagnostics | implemented | [link](changes/2026-05-27-012-llm-doctor-diagnostics.md) |
 <!-- add new records here -->
 
 ### Decisions
